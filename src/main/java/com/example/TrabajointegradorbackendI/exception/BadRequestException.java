@@ -1,2 +1,7 @@
-package com.example.TrabajointegradorbackendI.exception;public class BadRequestException {
+package com.example.TrabajointegradorbackendI.exception;
+
+public class BadRequestException extends Exception  {
+    public BadRequestException(String message) {
+        super(message);
+    }
 }

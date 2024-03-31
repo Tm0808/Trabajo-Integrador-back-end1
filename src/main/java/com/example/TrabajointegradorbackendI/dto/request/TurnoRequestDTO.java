@@ -1,4 +1,4 @@
-package com.example.TrabajointegradorbackendI.dto;
+package com.example.TrabajointegradorbackendI.dto.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

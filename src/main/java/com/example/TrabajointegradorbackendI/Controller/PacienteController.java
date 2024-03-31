@@ -1,4 +1,4 @@
-package com.example.TrabajointegradorbackendI.controller;
+package com.example.TrabajointegradorbackendI.Controller;
 
 import com.example.TrabajointegradorbackendI.entity.Paciente;
 import com.example.TrabajointegradorbackendI.service.IPacienteService;

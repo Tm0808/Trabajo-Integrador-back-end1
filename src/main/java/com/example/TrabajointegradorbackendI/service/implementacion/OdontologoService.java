@@ -48,5 +48,10 @@ public class OdontologoService implements IOdontologoService {
     public void actualizar(Odontologo odontologo) {
         odontologoRepository.save(odontologo);
     }
+
+    @Override
+    public Optional<Odontologo> findByMatricula(String matricula) {
+        return odontologoRepository.findByMatricula (matricula);
+    }
 }
 
