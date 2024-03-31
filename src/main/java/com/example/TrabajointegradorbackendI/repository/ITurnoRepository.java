@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface ITurnoRepository extends JpaRepository<Turno, Long> {
-    //@Query("SELECT o FROM Turno o WHERE o.turno = ?1")
-    //Optional<List<Turno>> findByTurno(String Turno);
+
 }

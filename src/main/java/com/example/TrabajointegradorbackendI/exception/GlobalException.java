@@ -9,8 +9,12 @@ public class GlobalException {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> recursoNoEncontrado(ResourceNotFoundException e) {
-        //vamos a querer que cuando se lance la excepción se devuelva un 404/400
-        //y el mensaje
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+    @ExceptionHandler (BadRequestException.class)
+    public ResponseEntity<String> malRequest (BadRequestException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST) .body(e.getMessage());
+    }
+
 }

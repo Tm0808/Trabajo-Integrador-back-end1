@@ -1,8 +1,10 @@
 package com.example.TrabajointegradorbackendI.service.implementacion;
 
 import com.example.TrabajointegradorbackendI.entity.Odontologo;
+import com.example.TrabajointegradorbackendI.exception.BadRequestException;
 import com.example.TrabajointegradorbackendI.repository.IOdontologoRepository;
 import com.example.TrabajointegradorbackendI.service.IOdontologoService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.Optional;
 @Service
 public class OdontologoService implements IOdontologoService {
     private IOdontologoRepository odontologoRepository;
+    private final Logger LOGGER = Logger.getLogger(OdontologoService.class);
 
     @Autowired
     public OdontologoService(IOdontologoRepository odontologoRepository) {
@@ -34,12 +37,13 @@ public class OdontologoService implements IOdontologoService {
 
 
     @Override
-    public Odontologo buscarPorId(Long id) {
+    public Odontologo buscarPorId(Long id) throws BadRequestException {
         Optional<Odontologo> odontologoOptional = odontologoRepository.findById(id);
         if (odontologoOptional.isPresent()) {
             return odontologoOptional.get();
-        } else {
-            return null;
+        } else { LOGGER.error("Error en buscarPorId");
+            throw new BadRequestException("Error en buscarPorId");
+
         }
 
     }
@@ -50,8 +54,15 @@ public class OdontologoService implements IOdontologoService {
     }
 
     @Override
-    public Optional<Odontologo> findByMatricula(String matricula) {
-        return odontologoRepository.findByMatricula (matricula);
+    public Optional<Odontologo> findByMatricula(String matricula) throws BadRequestException {
+        LOGGER.error("Error en el campo de Matricula");
+        throw new BadRequestException("Error en el campo de Matricula");
+        //return odontologoRepository.findByMatricula (matricula);
+    }
+
+    @Override
+    public void eliminarOdontologo(Long id) {
+
     }
 }
 

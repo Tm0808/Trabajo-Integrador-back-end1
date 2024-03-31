@@ -11,9 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface IPacienteRepository extends JpaRepository<Paciente, Long> {
-    //@Query("SELECT o FROM Paciente o WHERE o.nombre = ?1")
-    //Optional<List<Paciente>> findByNombre(String nombre);
-    //@Query ("SELECT o FROM Paciente o WHERE o.apellido = ?1")
-    //Optional <List<Paciente>> findByApellido(String apellido);
+
 
 }

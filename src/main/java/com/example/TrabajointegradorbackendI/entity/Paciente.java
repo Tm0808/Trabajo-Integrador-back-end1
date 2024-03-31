@@ -23,7 +23,7 @@ public class Paciente {
     private String apellido;
     private String dni;
     private LocalDate fechaIngreso;
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
     private Domicilio domicilio;
 
     @OneToMany(mappedBy = "paciente")
