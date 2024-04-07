@@ -1,7 +1,6 @@
 package com.example.TrabajointegradorbackendI.Controller;
 
 import com.example.TrabajointegradorbackendI.entity.Odontologo;
-import com.example.TrabajointegradorbackendI.exception.BadRequestException;
 import com.example.TrabajointegradorbackendI.service.IOdontologoService;
 import com.example.TrabajointegradorbackendI.service.implementacion.OdontologoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,56 +23,66 @@ public class OdontologoController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Odontologo> buscarPorId(@PathVariable Long id) throws BadRequestException {
 
-        return ResponseEntity.ok(odontologoService.buscarPorId(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<Odontologo> buscarPorId(@PathVariable Long id)  {
+        Optional<Odontologo> odontologo = odontologoService.buscarPorId(id);
+        return odontologo != null ? ResponseEntity.ok(odontologo.get()) : ResponseEntity.notFound().build();
     }
 
 
     @PostMapping
     public ResponseEntity<Odontologo> guardar(@RequestBody Odontologo odontologo) {
-        return ResponseEntity.ok(odontologoService.guardar(odontologo));
+        Odontologo nuevoOdontologo = null;
+        try {
+            nuevoOdontologo = odontologoService.guardar(odontologo);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoOdontologo);
+
     }
 
 
     @GetMapping
     public ResponseEntity<List<Odontologo>> listarTodos() {
-        return ResponseEntity.ok(odontologoService.listarTodos());
+        List<Odontologo> listaBuscados = odontologoService.listarTodos();
+        return ResponseEntity.ok(listaBuscados);
     }
 
 
     @PutMapping
-    public ResponseEntity<String> actualizar(@RequestBody Odontologo odontologo) throws BadRequestException {
-        ResponseEntity<String> response;
-        Odontologo odontologoBuscado = odontologoService.buscarPorId(odontologo.getId());
-        if (odontologoBuscado != null) {
-            odontologoService.actualizar(odontologo);
-            response = ResponseEntity.ok("Se actualizó el odontologo con id " + odontologo.getId());
+    public ResponseEntity<Odontologo> actualizar(@RequestBody Odontologo odontologo) throws Exception {
+        ResponseEntity<Odontologo> response;
+        Optional<Odontologo> odontologoBuscado = odontologoService.buscarPorId(odontologo.getId());
+        if (odontologoBuscado.isPresent()) {
+            odontologoService.guardar(odontologo);
+            response = new ResponseEntity(odontologo, HttpStatus.OK);
         } else {
-            response = ResponseEntity.ok().body("No se puede actualizar el odontologo");
+            response = ResponseEntity.notFound().build();
         }
         return response;
-
     }
 
-    @GetMapping("/{matricula}")
-    public ResponseEntity<Odontologo> findByMatricula(@PathVariable String matricula) throws Exception {
-        Optional<Odontologo> odontologoOptional = odontologoService.findByMatricula(matricula);
-        if (odontologoOptional.isPresent()) {
-            return ResponseEntity.ok(odontologoOptional.get());
-        } else {
-            throw new Exception("odontologo con matricula no disponible" + matricula);
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable("id") Long id) {
+        ResponseEntity<String> response;
+        Optional<Odontologo> odontologoBuscado = odontologoService.buscarPorId(id);
+        if (odontologoBuscado.isPresent()) {
+            odontologoService.eliminar(id);
+            response = ResponseEntity.ok("Se elimino el odontologo con id " + id);
         }
-
+        else {
+            response = ResponseEntity.notFound().build();
+        }
+        return response;
     }
 
-    @DeleteMapping("/{id)")
-    public ResponseEntity<HttpStatus> eliminar(@PathVariable Long id) {
-        odontologoService.eliminarOdontologo(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 }
+
+
 
 
 

@@ -2,6 +2,7 @@ package com.example.TrabajointegradorbackendI.service.implementacion;
 
 import com.example.TrabajointegradorbackendI.entity.Odontologo;
 import com.example.TrabajointegradorbackendI.exception.BadRequestException;
+import com.example.TrabajointegradorbackendI.exception.ResourceNotFoundException;
 import com.example.TrabajointegradorbackendI.repository.IOdontologoRepository;
 import com.example.TrabajointegradorbackendI.service.IOdontologoService;
 import org.apache.log4j.Logger;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Service
 public class OdontologoService implements IOdontologoService {
     private IOdontologoRepository odontologoRepository;
-    private final Logger LOGGER = Logger.getLogger(OdontologoService.class);
+    private static final Logger LOGGER = Logger.getLogger(OdontologoService.class);
 
     @Autowired
     public OdontologoService(IOdontologoRepository odontologoRepository) {
@@ -21,48 +22,105 @@ public class OdontologoService implements IOdontologoService {
     }
 
     @Override
-    public Odontologo guardar(Odontologo odontologo) {
-        return odontologoRepository.save(odontologo);
+    public Odontologo guardar(Odontologo odontologo) throws BadRequestException {
+        LOGGER.info("Persistiendo un Odontólogo");
+        Optional<Odontologo> odontologoOptional = odontologoRepository.findByMatricula(odontologo.getMatricula());
+        if (odontologoOptional.isEmpty()) {
+
+            if (odontologo.getNombre() == null ||  odontologo.getApellido() == null || odontologo.getMatricula() == null
+            || odontologo.getNombre().trim().isEmpty() || odontologo.getApellido().trim().isEmpty() || odontologo.getMatricula().trim().isEmpty()) {
+                throw new BadRequestException("No puedes poner campos vacíos");
+            }
+            LOGGER.info("Guardado exitosamente");
+            return odontologoRepository.save(odontologo);
+        } else {
+            LOGGER.error("Un Odontólogo con la misma Matrícula ya se encontraba en la base de datos");
+            throw new BadRequestException("Un Odontólogo con la misma Matrícula ya se encontraba en la base de datos");
+        }
     }
 
     @Override
     public List<Odontologo> listarTodos() {
+        LOGGER.info("Buscando la lista de Odontólogos");
         return odontologoRepository.findAll();
     }
 
     @Override
-    public Odontologo buscarPorId(Integer id) {
-        return null;
-    }
-
-
-    @Override
-    public Odontologo buscarPorId(Long id) throws BadRequestException {
+    public Optional<Odontologo> buscarPorId(Long id) throws ResourceNotFoundException {
+        LOGGER.info("Buscando el Odontólogo con id: " + id);
         Optional<Odontologo> odontologoOptional = odontologoRepository.findById(id);
         if (odontologoOptional.isPresent()) {
-            return odontologoOptional.get();
-        } else { LOGGER.error("Error en buscarPorId");
-            throw new BadRequestException("Error en buscarPorId");
-
+            return odontologoOptional;
+        } else {
+            LOGGER.error("No se encontró al Odontólogo con ID: " + id);
+            throw new ResourceNotFoundException("No se encontró al Odontólogo");
         }
-
+    }
+    @Override
+    public void actualizar(Odontologo odontologo) throws BadRequestException {
+        LOGGER.info("Actualizando el Odontólogo con id: " + odontologo.getId());
+        Optional<Odontologo> odontologoOptional = odontologoRepository.findByMatricula(odontologo.getMatricula());
+        if ((odontologoOptional.isPresent() && odontologo.getId().equals(odontologoOptional.get().getId())) ||  odontologoOptional.isEmpty()) {
+            if (odontologo.getNombre() == null || odontologo.getApellido() == null || odontologo.getMatricula() == null
+            || odontologo.getNombre().trim().isEmpty() ||  odontologo.getApellido().trim().isEmpty() || odontologo.getMatricula().trim().isEmpty()) {
+                LOGGER.error("Al menos uno de los campos a actualizar está vacío");
+                throw new BadRequestException("No puedes poner campos vacíos");
+            }
+            LOGGER.info("Actualizado exitosamente");
+            odontologoRepository.save(odontologo);
+        } else {
+            LOGGER.error("Ya existe un Odontólogo con esta Matrícula en la base de datos");
+            throw new BadRequestException("La matrícula del Odontólogo ya existe");
+        }
     }
 
     @Override
-    public void actualizar(Odontologo odontologo) {
-        odontologoRepository.save(odontologo);
+    public void eliminar(Long id) throws ResourceNotFoundException {
+        LOGGER.info("Eliminando al Odontólogo con id: " + id);
+        Optional<Odontologo> odontologoOptional = odontologoRepository.findById(id);
+        if (odontologoOptional.isPresent()) {
+            LOGGER.info("Odontólogo eliminado exitosamente");
+            odontologoRepository.deleteById(id);
+        } else {
+            LOGGER.error("El Odontólogo con ID: " + id + " no se encontró en la base de datos");
+            throw new ResourceNotFoundException("El Odontólogo con id: " + id + " no se encontró en la base de datos");
+        }
+    }
+    @Override
+    public Optional<List<Odontologo>> findByNombre(String nombre) throws ResourceNotFoundException {
+        LOGGER.info("Buscando Odontólogos por nombre: " + nombre);
+        Optional<List<Odontologo>> odontologosOptional = odontologoRepository.findByNombre(nombre);
+        if (odontologosOptional.isPresent()) {
+            return odontologosOptional;
+        } else {
+            LOGGER.error("No se encontraron Odontólogos con nombre: " + nombre);
+            throw new ResourceNotFoundException("Odontólogos no encontrados con nombre: " + nombre);
+        }
     }
 
     @Override
-    public Optional<Odontologo> findByMatricula(String matricula) throws BadRequestException {
-        LOGGER.error("Error en el campo de Matricula");
-        throw new BadRequestException("Error en el campo de Matricula");
-        //return odontologoRepository.findByMatricula (matricula);
+    public Optional<List<Odontologo>> findByApellido(String apellido) throws ResourceNotFoundException {
+        LOGGER.info("Buscando Odontólogos por apellido: " + apellido);
+        Optional<List<Odontologo>> odontologosOptional = odontologoRepository.findByApellido(apellido);
+        if (odontologosOptional.isPresent()) {
+            return odontologosOptional;
+        } else {
+            LOGGER.error("No se encontraron Odontólogos con apellido: " + apellido);
+            throw new ResourceNotFoundException("Odontólogos no encontrados con apellido: " + apellido);
+        }
     }
-
     @Override
-    public void eliminarOdontologo(Long id) {
-
+    public Optional<Odontologo> findByMatricula(String matricula) throws ResourceNotFoundException {
+        LOGGER.info("Buscando Odontólogo por matrícula: " + matricula);
+        Optional<Odontologo> odontologoOptional = odontologoRepository.findByMatricula(matricula);
+        if (odontologoOptional.isPresent()) {
+            return odontologoOptional;
+        } else {
+            LOGGER.error("No se encontró al Odontólogo con matrícula: " + matricula);
+            throw new ResourceNotFoundException("Odontólogo no encontrado con matrícula: " + matricula);
+        }
     }
 }
+
+
 

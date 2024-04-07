@@ -1,19 +1,18 @@
-package com.example.TrabajointegradorbackendI.dto.response;
+package com.example.TrabajointegradorbackendI.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class TurnoResponseDTO {
+public class TurnoDTO {
     private Long id;
     private Long odontologo_id;
     private Long paciente_id;
-    private String fecha;
     private String hora;
+    private String fecha;
 }

@@ -3,20 +3,20 @@ package com.example.TrabajointegradorbackendI.service;
 import com.example.TrabajointegradorbackendI.dto.request.TurnoRequestDTO;
 import com.example.TrabajointegradorbackendI.dto.response.TurnoResponseDTO;
 import com.example.TrabajointegradorbackendI.entity.Turno;
-import com.example.TrabajointegradorbackendI.exception.BadRequestException;
-import com.example.TrabajointegradorbackendI.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 public interface ITurnoService {
-    TurnoResponseDTO guardar(TurnoRequestDTO turno);
+    TurnoResponseDTO guardar(TurnoRequestDTO turno) throws Exception;
+    List<TurnoResponseDTO> listarTodos();
 
 
-    List<TurnoResponseDTO> listarTodos() throws BadRequestException;
+    Optional<TurnoResponseDTO> buscarPorId(Long id);
 
-
-    Optional<TurnoResponseDTO> buscarPorId(Long id) throws ResourceNotFoundException;
-    void eliminar(Integer id) throws BadRequestException;
+    void eliminar(Long id);
 
     void actualizar(Turno turno);
+    Optional<List<TurnoResponseDTO>> findByOdontologoId(Long id);
+    Optional<List<TurnoResponseDTO>> findByPacienteId(Long id);
+
 }

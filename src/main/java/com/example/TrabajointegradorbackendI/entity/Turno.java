@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "turnos")
@@ -17,12 +18,13 @@ public class Turno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Odontologo odontologo;
-    @ManyToOne
-    private Paciente paciente;
     private LocalDate fecha;
-
-
+    private LocalTime hora;
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
+    @ManyToOne
+    @JoinColumn(name = "odontologo_id")
+    private Odontologo odontologo;
 }
 

@@ -1,23 +1,18 @@
 package com.example.TrabajointegradorbackendI.service;
 
 import com.example.TrabajointegradorbackendI.entity.Paciente;
-import com.example.TrabajointegradorbackendI.exception.BadRequestException;
+
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IPacienteService {
+    Paciente guardar (Paciente paciente) throws Exception;
 
-    Paciente guardar (Paciente paciente);
+    List<Paciente> listarTodos();
 
-    List<Paciente> listarTodos() throws BadRequestException;
-
-    Paciente buscarPorId(Integer id) throws BadRequestException;
-
-    void eliminar(Integer id) throws BadRequestException;
-
-    Paciente buscarPorId(Long id);
-
+    Optional<Paciente> buscarPorId(Long id);
+    void actualizar(Paciente paciente) throws Exception;
     void eliminar(Long id);
-
-    void actualiza(Paciente paciente);
+    Optional<Paciente> findByDni(String dni);
 }

@@ -1,0 +1,11 @@
+[2024-04-06 15:12:27] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
+[2024-04-06 15:12:51] [ INFO ] [OdontologoService:26] Persistiendo un Odontólogo
+[2024-04-06 15:12:51] [ INFO ] [OdontologoService:34] Guardado exitosamente
+[2024-04-06 15:12:55] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
+[2024-04-06 15:15:37] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
+[2024-04-06 15:40:24] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
+[2024-04-06 15:40:30] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
+[2024-04-06 15:40:49] [ INFO ] [OdontologoService:26] Persistiendo un Odontólogo
+[2024-04-06 15:40:49] [ ERROR] [OdontologoService:37] Un Odontólogo con la misma Matrícula ya se encontraba en la base de datos
+[2024-04-06 15:40:54] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
+[2024-04-06 15:42:55] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
