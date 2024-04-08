@@ -9,3 +9,5 @@
 [2024-04-06 15:40:49] [ ERROR] [OdontologoService:37] Un Odontólogo con la misma Matrícula ya se encontraba en la base de datos
 [2024-04-06 15:40:54] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
 [2024-04-06 15:42:55] [ INFO ] [OdontologoService:45] Buscando la lista de Odontólogos
+[2024-04-08 11:35:15] [ INFO ] [OdontologoService:44] Buscando la lista de Odontólogos
+[2024-04-08 11:35:22] [ INFO ] [OdontologoService:44] Buscando la lista de Odontólogos

@@ -1,61 +1,38 @@
-//window.addEventListener('load', function () {
-//
-//    const formulario = document.querySelector('#add_new_dentist');
-//
-//    formulario.addEventListener('submit', function (event) {
-//
-//        const formData = {
-//            nombre: document.querySelector('#nombre').value,
-//            apellido: document.querySelector('#apellido').value,
-//            matricula: document.querySelector('#matricula').value,
-//
-//        };
-//        const url = '/odontologos';
-//        const settings = {
-//            method: 'POST',
-//            headers: {
-//                'Content-Type': 'application/json',
-//            },
-//            body: JSON.stringify(formData)
-//        }
-//        fetch(url, settings)
-//                    .then(response => response.json())
-//                    .then(data => {
-//                         let successAlert = '<div class="alert alert-success alert-dismissible">' +
-//                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-//                             '<strong></strong> Odontólogo agregado </div>'
-//
-//                         document.querySelector('#response').innerHTML = successAlert;
-//                         document.querySelector('#response').style.display = "block";
-//                         resetUploadForm();
-//
-//                    })
-//                    .catch(error => {
-//                            let errorAlert = '<div class="alert alert-danger alert-dismissible">' +
-//                                             '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-//                                             '<strong> Error intente nuevamente</strong> </div>'
-//
-//                              document.querySelector('#response').innerHTML = errorAlert;
-//                              document.querySelector('#response').style.display = "block";
-//                             resetUploadForm();})
-//            });
-//        function resetUploadForm(){
-//                document.querySelector('#nombre').value = "";
-//                document.querySelector('#apellido').value = "";
-//                document.querySelector('#matricula').value = "";
-//
-//            }
-//
-//            (function(){
-//                let pathname = window.location.pathname;
-//                if(pathname === "/"){
-//                    document.querySelector(".nav .nav-item a:first").addClass("active");
-//                } else if (pathname == "/dentistList.html") {
-//                    document.querySelector(".nav .nav-item a:last").addClass("active");
-//                }
-//            });
-//        });
 window.addEventListener('load', function () {
+
+    function getDentists() {
+        fetch('/odontologos')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error: Hubo un problema en el servidor. Código de estado: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tableBody = document.querySelector('#dentistaTableBody');
+                tableBody.innerHTML = '';
+
+                data.forEach(dentist => {
+                    const row = `
+                        <tr>
+                            <td>${dentist.id}</td>
+                            <td>${dentist.nombre}</td>
+                            <td>${dentist.apellido}</td>
+                            <td>${dentist.matricula}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener la lista de odontólogos:', error);
+            });
+    }
+
+    getDentists();
+
+});
+
 
     const formulario = document.querySelector('#add_new_dentist');
 
@@ -131,6 +108,16 @@ window.addEventListener('load', function () {
             document.querySelector(".nav .nav-item a:first").classList.add("active");
         } else if (pathname == "/odontologos.html") {
             document.querySelector(".nav .nav-item a:last").classList.add("active");
+        }
+
+    (function(){
+        let pathname = window.location.pathname;
+        if(pathname === "/listarOdontologos.html"){
+            document.querySelector(".nav .nav-item a[href='listarOdontologos.html']").classList.add("active");
+        } else if (pathname === "/agregarOdontologos.html") {
+            document.querySelector(".nav .nav-item a[href='agregarOdontologos.html']").classList.add("active");
+        } else if (pathname === "/turnos.html") {
+            document.querySelector(".nav .nav-item a[href='turnos.html']").classList.add("active");
         }
     })();
 });
